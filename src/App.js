@@ -147,7 +147,7 @@ const LocalBoard = ({isValidNext, isComplete, winner, cells, onClickCell}) => {
 };
 
 const MessageBar = styled.div`
-  border: 2px solid ${props => props.emphasized ? "#000" : "#eee"};
+  border: 2px solid ${props => (props.emphasized ? '#000' : '#eee')};
   text-align: center;
   font-size: 2rem;
   padding: 10px;
