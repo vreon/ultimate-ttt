@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Client} from 'boardgame.io/react';
-import {Game} from 'boardgame.io/core';
+import {Game, INVALID_MOVE} from 'boardgame.io/core';
 import {AI} from 'boardgame.io/ai';
 
 // Detect if these cells contain a winning state. This is called after each
@@ -47,20 +47,22 @@ const UltimateTicTacToe = Game({
 
   moves: {
     markCell(G, ctx, boardId, cellId) {
-      if (isValidMove(G, boardId, cellId)) {
-        G.boards[boardId].cells[cellId] = ctx.currentPlayer;
-
-        if (isVictory(G.boards[boardId].cells)) {
-          G.boards[boardId].complete = true;
-          G.boards[boardId].winner = ctx.currentPlayer;
-        } else if (isComplete(G.boards[boardId].cells)) {
-          G.boards[boardId].complete = true;
-        }
-
-        G.nextBoardId = G.boards[cellId].complete ? null : cellId;
-
-        ctx.events.endTurn();
+      if (!isValidMove(G, boardId, cellId)) {
+        return INVALID_MOVE;
       }
+
+      G.boards[boardId].cells[cellId] = ctx.currentPlayer;
+
+      if (isVictory(G.boards[boardId].cells)) {
+        G.boards[boardId].complete = true;
+        G.boards[boardId].winner = ctx.currentPlayer;
+      } else if (isComplete(G.boards[boardId].cells)) {
+        G.boards[boardId].complete = true;
+      }
+
+      G.nextBoardId = G.boards[cellId].complete ? null : cellId;
+
+      ctx.events.endTurn();
     },
   },
 
