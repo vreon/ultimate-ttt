@@ -61,8 +61,6 @@ const UltimateTicTacToe = Game({
       }
 
       G.nextBoardId = G.boards[cellId].complete ? null : cellId;
-
-      ctx.events.endTurn();
     },
   },
 
@@ -76,6 +74,7 @@ const UltimateTicTacToe = Game({
         return {draw: true};
       }
     },
+    movesPerTurn: 1,
   },
 });
 
@@ -155,6 +154,10 @@ const MessageBar = styled.div`
 `;
 
 const UltimateTicTacToeBoard = ({G, ctx, moves, events}) => {
+  const handleOnClickCell = (boardId, cellId) => {
+    moves.markCell(boardId, cellId);
+    events.endTurn();
+  };
   return (
     <div style={{width: 'min-content', userSelect: 'none'}}>
       <GlobalGrid>
@@ -168,7 +171,7 @@ const UltimateTicTacToeBoard = ({G, ctx, moves, events}) => {
             }
             isComplete={board.complete}
             winner={board.winner}
-            onClickCell={cellId => moves.markCell(boardId, cellId)}
+            onClickCell={cellId => handleOnClickCell(boardId, cellId)}
             cells={board.cells}
           />
         ))}
